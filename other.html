@@ -1,0 +1,119 @@
+<!doctype html>
+
+<html ng-app="myApp">
+
+<head>
+    <meta charset="utf-8">
+    <title>Reddit Clone</title>
+    <script  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.js" charset="utf-8">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" media="screen" title="no title" charset="utf-8"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<ng-controller ng-controller="redditController">
+
+  <header>
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+          <div class="navbar-brand">Reddit Clone</div>
+        </div>
+          <ul class="nav navbar-nav">
+            <li><p class="navbar-text" ng-click="showPostForm()"><span class="glyphicon glyphicon-plus"></span> Submit Post</p></li>
+          </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" ng-model="searchText" placeholder="Search">
+            </div>
+          </form>
+          <div class="input-group">
+            <p class="navbar-text">Sort By</p>
+            <select class="navbar-form form-inline" id="sort" ng-model="sortChoice">
+              <option value="-votes">Votes</option>
+              <option value="date">Date</option>
+              <option value="title">Title</option>
+            </select>
+          </div>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <form class="form-horizontal" name="formPost">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" ng-model="post.title" name="title" class="form-control" placeholder="Title of Post" required>
+      </div>
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" ng-model="post.author" name="author" class="form-control" placeholder="Author of Post" required>
+      </div>
+      <div class="form-group">
+        <label for="image">Image URL</label>
+        <input type="text" ng-model="post.image" name="image" class="form-control" placeholder="URL of Image" required>
+      </div>
+      <div class="form-group">
+        <label for="desc">Description</label>
+        <input type="text" ng-model="post.desc" name="desc" class="form-control" placeholder="Description" required>
+      </div>
+      <button class="btn btn-default" type="submit" ng-click="">Submit Post</button>
+    </form>
+
+    <div class="clearfix"></div>
+
+    <div ng-repeat="post in posts | orderBy:sortChoice">
+      <div class="row uploads">
+        <div class="col-md-3">
+          <img ng-src="{{post.image}}" alt="photo of {{post.title}}" class="imgClass"/>
+        </div>
+        <div class="col-md-8 col-md-offset-1">
+          <div class="row">
+            <p>{{post.title}} |
+             <span class="glyphicon glyphicon-arrow-up" ng-click="post.votes = post.votes + 1"></span>
+             <span class="glyphicon glyphicon-arrow-down" ng-click="post.votes = post.votes - 1"></span>
+            <span ng-class="{upvotes: post.votes > 0, downvotes: post.votes < 0}"> {{post.votes}}</span></p>
+          </div>
+          <div class="row">
+            <p class="text-right">By {{post.author}}</p>
+          </div>
+          <div class="row">
+            <p id="description">{{post.desc}}</p>
+          </div>
+          <div class="row">
+            <p><span class="glyphicon glyphicon-calendar"> </span>
+             <time title="{{ post.date }}">{{post.date}}</time> |
+              <span class="glyphicon glyphicon-comment"></span>
+               <span ng-click="toggleComments(post); $event.stopPropagation()">
+               <ng-pluralize count="post.comments.length" when="{
+              '1': '{{post.comments.length}} comment',
+              'other': '{{post.comments.length}} comments'}"></ng-pluralize>
+              </span> |
+               <span class="glyphicon glyphicon-pencil"></span>
+              <span ng-click="showCommentForm(post)">Add Comment</span></p>
+            <div ng-show="commentsView" ng-repeat="comment in post.comments">
+              <p><strong>{{comment.author}}</strong> - {{comment.text}}</p>
+            </div>
+            <form ng-show="commentForm">
+              <div>
+                <label for="author">Author</label>
+                <input type="text" ng-model="comment.author" name="author" placeholder="username">
+                <label for="text">Text</label>
+                <input type="text" ng-model="comment.text" name="text" placeholder="comment text">
+                <button class="btn btn-default" type="submit" ng-click="addComment(post)">Add Comment</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+  </ng-controller>
+
+
+  <script src="app.js"></script>
+</body>
+
+</html>

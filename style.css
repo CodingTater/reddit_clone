@@ -1,0 +1,27 @@
+.imgClass {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden
+
+}
+
+.uploads {
+	background-color: #F9F9F9;
+	padding: 10px 10px 10px;
+	margin: 10px 0 10px 0;
+	border-radius: 5px;
+}
+
+.upvotes {
+
+}
+
+.downvotes {
+
+}
+
+.toggle {
+  
+}
