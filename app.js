@@ -1,8 +1,7 @@
 var app = angular.module("myApp", ['angularMoment', 'ngAnimate']);
 
 app.controller("redditController", function($scope) {
-	$this.toggle = false;
-	$scope.posts = [{	
+	$scope.posts = [{
 		'title': 'Outside Aspen',
 		'author': 'Ned Stark',
 		'image': 'http://www.outsideonline.com/sites/default/files/styles/three-quarter-page-scaled-1x/public/aspen-apres-ski-in_h.jpg?itok=XSJCFYxH',
