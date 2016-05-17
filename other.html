@@ -9,9 +9,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.js" charset="utf-8">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" media="screen" title="no title" charset="utf-8"/>
     <link rel="stylesheet" href="style.css"/>
 </head>
+<body>
 
 <ng-controller ng-controller="redditController">
 
@@ -84,7 +86,7 @@
           </div>
           <div class="row">
             <p><span class="glyphicon glyphicon-calendar"> </span>
-             <time title="{{ post.date }}">{{post.date}}</time> |
+             <time title="{{ post.date }}">{{ post.date | date:'medium' }}</time> |
               <span class="glyphicon glyphicon-comment"></span>
                <span ng-click="toggleComments(post); $event.stopPropagation()">
                <ng-pluralize count="post.comments.length"

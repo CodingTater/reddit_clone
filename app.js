@@ -1,4 +1,4 @@
-var app = angular.module("myApp", ['angularMoment', 'ngAnimate']);
+var app = angular.module("myApp", ['ngAnimate', 'angularMoment']);
 
 app.controller("redditController", function($scope) {
 	$scope.posts = [{
