@@ -1,9 +1,10 @@
 .imgClass {
   height: 150px;
+  max-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden
+  overflow: hidden;
 
 }
 
@@ -15,13 +16,21 @@
 }
 
 .upvotes {
-
+  color: #34B007;
 }
 
 .downvotes {
-
+  color: red;
 }
 
-.toggle {
-  
+#sortParent {
+  position: relative;
+}
+
+#sort {
+position: absolute;
+top: 0;
+bottom: 0;
+height: 30%
+margin: auto;
 }

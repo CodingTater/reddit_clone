@@ -33,7 +33,45 @@ app.controller("redditController", function($scope) {
 	$scope.commentsView = false;
 	$scope.sortChoice = '-votes';
 
-app.animation()
+	$scope.showCommentForm = function(post) {
+	this.commentsView = false;
+	this.commentForm = true;
+};
 
+$scope.addComment = function(post) {
+	post.comments.push(this.comment);
+	this.comment = {};
+	this.commentForm = false;
+	this.commentsView = true;
+};
+
+$scope.toggleComments = function(post) {
+	if(!this.commentsView) {
+		this.commentsView = true;
+		} else {
+			this.commentsView = false;
+		}
+};
+
+
+	$scope.displayPostForm = function() {
+		$scope.viewForm = true;
+	};
+
+	$scope.cancelPostForm = function() {
+		$scope.viewForm = false;
+		$scope.postForm.$setUntouched();
+	};
+
+	$scope.addPost = function() {
+		if ($scope.newPost.$valid) {
+			$scope.post.date = new Date();
+			$scope.post.votes = 0;
+			$scope.posts.push($scope.post);
+			$scope.post = {};
+			$scope.viewForm = false;
+			$scope.newPost.$setUntouched();
+		}
+	};
 
 })
