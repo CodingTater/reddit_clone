@@ -6,7 +6,7 @@ app.controller("redditController", function($scope) {
 		'author': 'Ned Stark',
 		'image': 'http://www.outsideonline.com/sites/default/files/styles/three-quarter-page-scaled-1x/public/aspen-apres-ski-in_h.jpg?itok=XSJCFYxH',
 		'desc': 'Some mountains outside aspen',
-		'date': new Date(),
+		'date': 1288317823006,
 		'votes': 10,
 		'comments': []
 	}, {
@@ -14,7 +14,7 @@ app.controller("redditController", function($scope) {
 		'author': 'Hodor',
 		'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cliffs_of_Moher_with_O%27Brien%27s_Tower_-_2012.jpg/800px-Cliffs_of_Moher_with_O%27Brien%27s_Tower_-_2012.jpg',
 		'desc': 'Some cliffs of Moher, duh.',
-		'date': new Date(),
+		'date': 1288323623006,
 		'votes': 5,
 		'comments': []
 	}, {
@@ -22,7 +22,7 @@ app.controller("redditController", function($scope) {
 		'author': 'John Snow',
 		'image': 'https://res.cloudinary.com/roadtrippers/image/upload/c_fill,h_316,w_520/v1370384018/hoh-rain-forest-51a525be7f3d772cd2002703.jpg',
 		'desc': 'Dat Rainforest doe',
-		'date': new Date(),
+		'date': 1222323623006,
 		'votes': 2,
 		'comments': []
 	}];
@@ -55,8 +55,12 @@ $scope.toggleComments = function(post) {
 
 
 	$scope.displayPostForm = function() {
-		$scope.viewForm = true;
-	};
+		if(!this.viewForm) {
+			this.viewForm = true;
+		} else {
+			this.viewForm = false;
+	}
+};
 
 	$scope.cancelPostForm = function() {
 		$scope.viewForm = false;

@@ -2,123 +2,243 @@
 
 <html ng-app="myApp">
 
-<head>
-    <meta charset="utf-8">
-    <title>Reddit Clone</title>
-    <script  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.js" charset="utf-8">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" media="screen" title="no title" charset="utf-8"/>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+    <head>
+        <meta charset="utf-8">
+        <title>Reddit Clone</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" media="screen" title="no title" charset="utf-8"/>
+        <style media="screen">
+            .imgClass {
+                height: 150px;
+                max-width: 300px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
 
-<ng-controller ng-controller="redditController">
+            }
 
-  <header>
-    <nav class="navbar navbar-default">
-        <div class="navbar-header">
-          <div class="navbar-brand">Reddit Clone</div>
-        </div>
-          <ul class="nav navbar-nav">
-            <li><p class="navbar-text" ng-click="displayPostForm()"><span class="glyphicon glyphicon-plus"></span> Submit Post</p></li>
-          </ul>
-          <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-              <input type="text" class="form-control" ng-model="searchText" placeholder="Search">
-            </div>
-          </form>
-          <div class="input-group" id="sortParent">
-            <p class="navbar-text">Sort By</p>
-            <select class="navbar-form form-inline" id="sort" ng-model="sortChoice">
-              <option value="-votes">Votes</option>
-              <option value="date">Date</option>
-              <option value="title">Title</option>
-            </select>
-          </div>
-    </nav>
-  </header>
+            .uploads {
+                background-color: #F9F9F9;
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 5px;
+            }
 
-  <main class="container">
+            .upvotes {
+                color: #34B007;
+            }
 
-    <form ng-valid ng-show="viewForm" class="form-horizontal white" name="newPost">
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" ng-model="post.title" name="title" class="form-control" placeholder="Title of Post" required>
-      </div>
-      <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" ng-model="post.author" name="author" class="form-control" placeholder="Author of Post" required>
-      </div>
-      <div class="form-group">
-        <label for="image">Image URL</label>
-        <input type="text" ng-model="post.image" name="image" class="form-control" placeholder="URL of Image" required>
-      </div>
-      <div class="form-group">
-        <label for="desc">Description</label>
-        <input type="text" ng-model="post.desc" name="desc" class="form-control" placeholder="Description" required>
-      </div>
-      <button class="btn btn-default" ng-disabled="newPost.$invalid" type="submit" ng-click="addPost()">Submit Post</button>
-      <button class="btn btn-default" type="submit" ng-click="cancelPostForm()">Cancel</button>
-    </form>
+            .downvotes {
+                color: red;
+            }
 
-    <div class="clearfix"></div>
+            #sortParent {
+                position: relative;
+            }
 
-    <div ng-repeat="post in posts | orderBy:sortChoice">
-      <div class="row uploads">
-        <div class="col-md-3">
-          <img ng-src="{{post.image}}" alt="photo of {{post.title}}" class="imgClass"/>
-        </div>
-        <div class="col-md-8 col-md-offset-1">
-          <div class="row">
-            <p>{{post.title}} |
-             <span class="glyphicon glyphicon-arrow-up" ng-click="post.votes = post.votes + 1"></span>
-             <span class="glyphicon glyphicon-arrow-down" ng-click="post.votes = post.votes - 1"></span>
-            <span ng-class="{upvotes: post.votes > 0, downvotes: post.votes < 0}"> {{post.votes}}</span></p>
-          </div>
-          <div class="row">
-            <p class="text-right">By {{post.author}}</p>
-          </div>
-          <div class="row">
-            <p id="description">{{post.desc}}</p>
-          </div>
-          <div class="row">
-            <p><span class="glyphicon glyphicon-calendar"> </span>
-             <time title="{{ post.date }}">{{ post.date | date:'medium' }}</time> |
-              <span class="glyphicon glyphicon-comment"></span>
-               <span ng-click="toggleComments(post); $event.stopPropagation()">
-               <ng-pluralize count="post.comments.length"
-                  when="{
-                        '1': '{{post.comments.length}} comment',
-                        'other': '{{post.comments.length}} comments'}">
-                </ng-pluralize>
-              </span> |
-               <span class="glyphicon glyphicon-pencil"></span>
-              <span ng-click="showCommentForm(post)">Add Comment</span></p>
-            <div ng-show="commentsView" ng-repeat="comment in post.comments">
-              <p><strong>{{comment.author}}</strong> - {{comment.text}}</p>
-            </div>
-            <form ng-show="commentForm">
-              <div>
-                <label for="author">Author</label>
-                <input type="text" ng-model="comment.author" name="author" placeholder="username">
-                <label for="text">Text</label>
-                <input type="text" ng-model="comment.text" name="text" placeholder="comment text">
-                <button class="btn btn-default" type="submit" ng-click="addComment(post)">Add Comment</button>
-              </div>
+            #sort {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                height:30% margin: auto;
+            }
+
+            body {
+                background-color: #2F4F4F;
+            }
+
+            .white {
+                color: white;
+            }
+
+        </style>
+    </head>
+    <body ng-controller="redditController">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <div class="navbar-brand">Reddit Clone</div>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <p class="navbar-text" ng-click="displayPostForm()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Submit Post</p>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchText" placeholder="Search">
+                    </div>
+                </form>
+                <div class="input-group" id="sortParent">
+                    <p class="navbar-text">Sort By</p>
+                    <select class="navbar-form form-inline" id="sort" ng-model="sortChoice">
+                        <option value="-votes">Votes</option>
+                        <option value="date">Date</option>
+                        <option value="title">Title</option>
+                    </select>
+                </div>
+            </nav>
+        </header>
+        <main class="container">
+            <form ng-valid ng-show="viewForm" class="form-horizontal white" name="newPost">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" ng-model="post.title" name="title" class="form-control" placeholder="Title of Post" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" ng-model="post.author" name="author" class="form-control" placeholder="Author of Post" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Image URL</label>
+                    <input type="text" ng-model="post.image" name="image" class="form-control" placeholder="URL of Image" required>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Description</label>
+                    <input type="text" ng-model="post.desc" name="desc" class="form-control" placeholder="Description" required>
+                </div>
+                <button class="btn btn-default" ng-disabled="newPost.$invalid" type="submit" ng-click="addPost()">Submit Post</button>
+                <button class="btn btn-default" type="submit" ng-click="cancelPostForm()">Cancel</button>
             </form>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </div>
-    </div>
 
-  </ng-controller>
+            <div class="clearfix"></div>
 
+            <div ng-repeat="post in posts | orderBy:sortChoice">
+                <div class="row uploads">
+                    <div class="col-md-3">
+                        <img ng-src="{{post.image}}" alt="photo of {{post.title}}" class="imgClass"/>
+                    </div>
+                    <div class="col-md-8 col-md-offset-1">
+                        <div class="row">
+                            <p>{{post.title}}
+                                |
+                                <span class="glyphicon glyphicon-arrow-up" ng-click="post.votes = post.votes + 1"></span>
+                                <span class="glyphicon glyphicon-arrow-down" ng-click="post.votes = post.votes - 1"></span>
+                                <span ng-class="{upvotes: post.votes > 0, downvotes: post.votes < 0}">
+                                    {{post.votes}}</span>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="text-right">By
+                                {{post.author}}</p>
+                        </div>
+                        <div class="row">
+                            <p id="description">{{post.desc}}</p>
+                        </div>
+                        <div class="row">
+                            <p>
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                <time title="{{ post.date }}">{{ post.date | date:'medium' }}</time>
+                                |
+                                <span class="glyphicon glyphicon-comment"></span>
+                                <span ng-click="toggleComments(post); $event.stopPropagation()">
+                                    <ng-pluralize count="post.comments.length" when="{
+                        '1': '{{post.comments.length}} comment',
+                        'other': '{{post.comments.length}} comments'}"></ng-pluralize>
+                                </span>
+                                |
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span ng-click="showCommentForm(post)">Add Comment</span>
+                            </p>
+                            <div ng-show="commentsView" ng-repeat="comment in post.comments">
+                                <p>
+                                    <strong>{{comment.author}}</strong>
+                                    -
+                                    {{comment.text}}</p>
+                            </div>
+                            <form ng-show="commentForm">
+                                <div>
+                                    <label for="author">Author</label>
+                                    <input type="text" ng-model="comment.author" name="author" placeholder="username">
+                                    <label for="text">Text</label>
+                                    <input type="text" ng-model="comment.text" name="text" placeholder="comment text">
+                                    <button class="btn btn-default" type="submit" ng-click="addComment(post)">Add Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </main>
+        <script>
+            var app = angular.module("myApp", []);
 
-  <script src="app.js"></script>
-</body>
+            app.controller("redditController", function($scope) {
+                $scope.posts = [
+                    {
+                        'title': 'Outside Aspen',
+                        'author': 'Ned Stark',
+                        'image': 'http://www.outsideonline.com/sites/default/files/styles/three-quarter-page-scaled-1x/public/aspen-apres-ski-in_h.jpg?itok=XSJCFYxH',
+                        'desc': 'Some mountains outside aspen',
+                        'date': 1288317823006,
+                        'votes': 10,
+                        'comments': []
+                    }, {
+                        'title': 'Cliffs of Moher',
+                        'author': 'Hodor',
+                        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cliffs_of_Moher_with_O%27Brien%27s_Tower_-_2012.jpg/800px-Cliffs_of_Moher_with_O%27Brien%27s_Tower_-_2012.jpg',
+                        'desc': 'Some cliffs of Moher, duh.',
+                        'date': 1288323623006,
+                        'votes': 5,
+                        'comments': []
+                    }, {
+                        'title': 'Olympic National Park',
+                        'author': 'John Snow',
+                        'image': 'https://res.cloudinary.com/roadtrippers/image/upload/c_fill,h_316,w_520/v1370384018/hoh-rain-forest-51a525be7f3d772cd2002703.jpg',
+                        'desc': 'Dat Rainforest doe',
+                        'date': 1222323623006,
+                        'votes': 2,
+                        'comments': []
+                    }
+                ];
+                $scope.post = {};
+                $scope.post.comments = [];
+                $scope.post.comment = {};
+                $scope.commentForm = false;
+                $scope.commentsView = false;
+                $scope.sortChoice = '-votes';
 
+                $scope.showCommentForm = function(post) {
+                    this.commentsView = false;
+                    this.commentForm = true;
+                };
+
+                $scope.addComment = function(post) {
+                    post.comments.push(this.comment);
+                    this.comment = {};
+                    this.commentForm = false;
+                    this.commentsView = true;
+                };
+
+                $scope.toggleComments = function(post) {
+                    if (!this.commentsView) {
+                        this.commentsView = true;
+                    } else {
+                        this.commentsView = false;
+                    }
+                };
+                $scope.displayPostForm = function() {
+                    $scope.viewForm = true;
+                };
+                $scope.cancelPostForm = function() {
+                    $scope.viewForm = false;
+                    $scope.postForm.$setUntouched();
+                };
+                $scope.addPost = function() {
+                    if ($scope.newPost.$valid) {
+                        $scope.post.date = new Date();
+                        $scope.post.votes = 0;
+                        $scope.posts.push($scope.post);
+                        $scope.post = {};
+                        $scope.viewForm = false;
+                        $scope.newPost.$setUntouched();
+                    }
+                };
+            })
+        </script>
+    </body>
 </html>
